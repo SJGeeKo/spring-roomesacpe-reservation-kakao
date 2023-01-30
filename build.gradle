@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.yaml:snakeyaml:1.33' // SpringBoot 없이 yaml 파일 읽게해주는 라이브러리
