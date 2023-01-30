@@ -1,5 +1,6 @@
 package nextstep;
 
+import nextstep.config.BeanContext;
 import nextstep.domain.Reservation;
 import nextstep.domain.Theme;
 import nextstep.exception.EscapeException;
@@ -8,6 +9,7 @@ import nextstep.repository.theme.ConsoleThemeRepository;
 import nextstep.service.ReservationService;
 import nextstep.service.ThemeService;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -28,10 +30,10 @@ public class ConsoleEscapeApplication {
     private static final String THEME_SUCCESS_MESSAGE = "테마가 등록되었습니다.";
     private static final String THEME_DELETE_SUCCESS_MESSAGE = "테마가 삭제되었습니다.";
 
-    private static final ConsoleReservationRepository consoleReservationRepository = new ConsoleReservationRepository();
+    private static final ConsoleReservationRepository consoleReservationRepository = new ConsoleReservationRepository(BeanContext.get(DataSource.class));
     private static final ReservationService reservationService = new ReservationService(consoleReservationRepository);
 
-    private static final ThemeService themeService = new ThemeService(new ConsoleThemeRepository(), consoleReservationRepository);
+    private static final ThemeService themeService = new ThemeService(new ConsoleThemeRepository(BeanContext.get(DataSource.class)), consoleReservationRepository);
 
     public static void run() {
         Scanner scanner = new Scanner(System.in);

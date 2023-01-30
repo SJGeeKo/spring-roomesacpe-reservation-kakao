@@ -1,9 +1,9 @@
 package nextstep.repository.theme;
 
-import nextstep.config.DbConfig;
 import nextstep.domain.Theme;
 import nextstep.exception.EscapeException;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +12,19 @@ import static nextstep.exception.ErrorCode.*;
 
 public class ConsoleThemeRepository extends ThemeRepository {
 
-    private Connection con = null;
-    private DbConfig dbConfig = new DbConfig();
+    private final DataSource dataSource;
 
-    public ConsoleThemeRepository() {
+    public ConsoleThemeRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
         connect();
     }
+
+    private Connection con = null;
 
     private void connect() {
         // 드라이버 연결
         try {
-            con = DriverManager.getConnection(dbConfig.getUrl(), dbConfig.getUsername(), dbConfig.getPassword());
+            con = dataSource.getConnection();
         } catch (SQLException e) {
             throw new EscapeException(SQL_ERROR);
         }
