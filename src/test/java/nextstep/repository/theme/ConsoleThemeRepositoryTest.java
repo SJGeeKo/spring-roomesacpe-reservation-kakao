@@ -3,8 +3,13 @@ package nextstep.repository.theme;
 import nextstep.domain.Theme;
 import nextstep.exception.EscapeException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 import static nextstep.exception.ErrorCode.DUPLICATED_THEME_EXISTS;
@@ -14,11 +19,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ConsoleThemeRepositoryTest {
 
-    ConsoleThemeRepository consoleThemeRepository = new ConsoleThemeRepository();
+    @Autowired DataSource dataSource;
+    ConsoleThemeRepository consoleThemeRepository;
 
     Theme theme = new Theme(4L, "테스트 테마", "테스트용 테마임", 1234);
+
+    @BeforeAll
+    void setUpRepository() {
+        consoleThemeRepository = new ConsoleThemeRepository(dataSource);
+    }
 
     @AfterEach
     void setUpTable() throws Exception {
